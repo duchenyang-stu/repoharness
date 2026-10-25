@@ -1,0 +1,11 @@
+{
+  "iterations": 100,
+  "successful_recoveries": 100,
+  "recovery_rate": 1.0,
+  "duplicate_write_failures": 0,
+  "latency_ms": {
+    "p50": 6.59,
+    "p95": 7.784
+  },
+  "scope": "local deterministic runtime; excludes LLM and network latency"
+}

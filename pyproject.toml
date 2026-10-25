@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repoharness"
+version = "0.1.0"
+description = "A resumable, observable agent harness for repository tasks"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi>=0.95,<0.100", "pydantic>=1.10,<2", "uvicorn>=0.23,<0.31"]
+dev = ["pytest>=8.0", "httpx>=0.24,<0.25"]
+
+[project.scripts]
+repoharness = "repoharness.cli:main"
+repoharness-mcp = "repoharness.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

@@ -1,0 +1,9 @@
+
+[api]
+fastapi<0.100,>=0.95
+pydantic<2,>=1.10
+uvicorn<0.31,>=0.23
+
+[dev]
+pytest>=8.0
+httpx<0.25,>=0.24
