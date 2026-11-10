@@ -22,7 +22,7 @@ def create_app(runtime_factory: Callable[[str], AgentRuntime]):
         objective: str = Field(min_length=1, max_length=10_000)
         workspace: str = Field(min_length=1)
 
-    app = FastAPI(title="RepoHarness", version="0.1.0")
+    app = FastAPI(title="RepoHarness", version="0.2.0")
     runtimes: dict[str, AgentRuntime] = {}
     lock = threading.Lock()
 

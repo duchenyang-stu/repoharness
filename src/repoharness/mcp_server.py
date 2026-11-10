@@ -24,7 +24,7 @@ class MCPServer:
                 result = {
                     "protocolVersion": "2024-11-05",
                     "capabilities": {"tools": {"listChanged": False}},
-                    "serverInfo": {"name": "repoharness", "version": "0.1.0"},
+                    "serverInfo": {"name": "repoharness", "version": "0.2.0"},
                 }
             elif method == "tools/list":
                 result = {"tools": self.tools.mcp_tools()}

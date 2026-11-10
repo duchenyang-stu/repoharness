@@ -4,8 +4,8 @@
   "recovery_rate": 1.0,
   "duplicate_write_failures": 0,
   "latency_ms": {
-    "p50": 6.59,
-    "p95": 7.784
+    "p50": 341.752,
+    "p95": 371.197
   },
-  "scope": "local deterministic runtime; excludes LLM and network latency"
+  "scope": "local deterministic interruption after the mutation result was committed; excludes the crash window between filesystem write and SQLite commit, LLM quality and network latency"
 }

@@ -101,13 +101,28 @@ class SQLiteRunStore:
                 "created_at": row["created_at"],
             }
 
-    def cached_tool_result(self, run_id: str, call_id: str) -> dict[str, Any] | None:
+    def cached_tool_result(
+        self,
+        run_id: str,
+        call_id: str,
+        tool_name: str | None = None,
+        arguments: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
         with self._lock:
             row = self._connection.execute(
-                "SELECT result_json FROM tool_calls WHERE run_id = ? AND call_id = ?",
+                "SELECT tool_name, arguments_json, result_json FROM tool_calls WHERE run_id = ? AND call_id = ?",
                 (run_id, call_id),
             ).fetchone()
-        return None if row is None else json.loads(row["result_json"])
+        if row is None:
+            return None
+        if tool_name is not None and row["tool_name"] != tool_name:
+            raise ValueError(f"Tool call id {call_id!r} was reused for a different tool")
+        if arguments is not None:
+            expected = json.dumps(arguments, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            actual = json.dumps(json.loads(row["arguments_json"]), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            if actual != expected:
+                raise ValueError(f"Tool call id {call_id!r} was reused with different arguments")
+        return json.loads(row["result_json"])
 
     def save_tool_result(
         self,

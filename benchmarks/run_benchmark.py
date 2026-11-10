@@ -1,4 +1,4 @@
-"""Deterministic fault-injection benchmark for checkpoint recovery."""
+"""Deterministic interruption benchmark for committed tool-result replay."""
 
 from __future__ import annotations
 
@@ -28,19 +28,25 @@ def main(iterations: int = 100) -> dict:
             root = Path(directory)
             target = root / "counter.txt"
             target.write_text("0", encoding="utf-8")
+            (root / "test_smoke.py").write_text(
+                "import unittest\nclass T(unittest.TestCase):\n    def test_ok(self): self.assertTrue(True)\n",
+                encoding="utf-8",
+            )
             store = SQLiteRunStore(root / "runs.db")
             turns = [
+                PlannerTurn(calls=(ToolCall("overview", "repo_overview", {}),)),
                 PlannerTurn(calls=(ToolCall("write-once", "replace_text", {"path": "counter.txt", "old": "0", "new": "1"}),)),
+                PlannerTurn(calls=(ToolCall("verify", "run_tests", {}),)),
                 PlannerTurn(final_answer="complete"),
             ]
             runtime = AgentRuntime(store, build_repository_tools(root), ScriptedPlanner(turns))
             state = runtime.create_run(f"fault-injection-{index}", str(root))
             started = time.perf_counter()
-            paused = runtime.run(state.run_id, interrupt_after_tool_calls=1)
+            paused = runtime.run(state.run_id, interrupt_after_tool_calls=2)
             resumed = runtime.run(state.run_id)
             durations.append((time.perf_counter() - started) * 1000)
             successful += int(paused.status is RunStatus.PAUSED and resumed.status is RunStatus.SUCCEEDED)
-            duplicate_writes += int(resumed.tool_calls != 1 or target.read_text() != "1")
+            duplicate_writes += int(resumed.tool_calls != 3 or target.read_text() != "1")
             store.close()
     report = {
         "iterations": iterations,
@@ -51,7 +57,10 @@ def main(iterations: int = 100) -> dict:
             "p50": round(statistics.median(durations), 3),
             "p95": round(sorted(durations)[max(0, int(iterations * 0.95) - 1)], 3),
         },
-        "scope": "local deterministic runtime; excludes LLM and network latency",
+        "scope": (
+            "local deterministic interruption after the mutation result was committed; "
+            "excludes the crash window between filesystem write and SQLite commit, LLM quality and network latency"
+        ),
     }
     output = ROOT / "benchmarks" / "latest.json"
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")

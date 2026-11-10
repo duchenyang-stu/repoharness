@@ -50,7 +50,12 @@ class WorkspaceSandbox:
         if not command:
             raise ValueError("Command cannot be empty")
         executable = Path(command[0]).name.lower()
-        allowed = {"python", "python.exe", "py", "py.exe", "pytest", "pytest.exe"}
+        allowed = {
+            "python", "python.exe", "py", "py.exe", "pytest", "pytest.exe",
+            "ruff", "ruff.exe", "mypy", "mypy.exe",
+            "npm", "npm.cmd", "pnpm", "pnpm.cmd", "yarn", "yarn.cmd",
+            "cargo", "cargo.exe", "go", "go.exe",
+        }
         if executable not in allowed:
             raise PermissionError(f"Executable is not allowed: {executable}")
         if executable in {"python", "python.exe", "py", "py.exe"}:
@@ -63,6 +68,15 @@ class WorkspaceSandbox:
                     raise PermissionError(f"Python module is not allowed: {module}")
             elif len(command) > 1 and not command[1].startswith("-"):
                 self.resolve(command[1], must_exist=True)
+        elif executable in {"npm", "npm.cmd", "pnpm", "pnpm.cmd", "yarn", "yarn.cmd"}:
+            if len(command) < 2 or command[1] not in {"test", "run"}:
+                raise PermissionError("Only package test/lint/typecheck scripts are allowed")
+            if command[1] == "run" and (len(command) < 3 or command[2] not in {"test", "lint", "typecheck", "check"}):
+                raise PermissionError("Package script is not allowed")
+        elif executable in {"cargo", "cargo.exe"} and (len(command) < 2 or command[1] not in {"test", "check", "clippy"}):
+            raise PermissionError("Cargo command is not allowed")
+        elif executable in {"go", "go.exe"} and (len(command) < 2 or command[1] not in {"test", "vet"}):
+            raise PermissionError("Go command is not allowed")
         return subprocess.run(
             list(command),
             cwd=self.root,

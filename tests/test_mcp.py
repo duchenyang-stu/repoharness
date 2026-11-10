@@ -22,7 +22,7 @@ class MCPServerTests(unittest.TestCase):
         result = self.server.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         self.assertEqual(result["result"]["protocolVersion"], "2024-11-05")
         listed = self.server.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
-        self.assertEqual(len(listed["result"]["tools"]), 5)
+        self.assertEqual(len(listed["result"]["tools"]), 8)
 
     def test_tool_call_returns_mcp_content(self):
         response = self.server.handle({
