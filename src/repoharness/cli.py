@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 from .models import Budget, PlannerTurn, ToolCall
@@ -16,7 +17,16 @@ from .env import load_env
 from .evaluation import run_suite
 
 
+def configure_utf8_output() -> None:
+    """Emit UTF-8 regardless of the Windows console / redirect code page (e.g. GBK)."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
 def main() -> None:
+    configure_utf8_output()
     load_env()
     parser = argparse.ArgumentParser(description="RepoHarness repository-agent runtime")
     subparsers = parser.add_subparsers(dest="command", required=True)
