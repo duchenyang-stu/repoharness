@@ -12,10 +12,12 @@ from .planners import OpenAICompatiblePlanner, ScriptedPlanner
 from .runtime import AgentRuntime
 from .store import SQLiteRunStore
 from .tools import build_repository_tools
+from .env import load_env
 from .evaluation import run_suite
 
 
 def main() -> None:
+    load_env()
     parser = argparse.ArgumentParser(description="RepoHarness repository-agent runtime")
     subparsers = parser.add_subparsers(dest="command", required=True)
     demo = subparsers.add_parser("demo", help="Run a deterministic inspect/test workflow")
