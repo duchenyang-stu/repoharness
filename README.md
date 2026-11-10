@@ -67,8 +67,10 @@ $env:PYTHONPATH = "src"
 
 ## 运行在线 Agent
 
+在项目根目录或当前目录放一个 `.env`（参考 `.env.example`），启动时会自动读取；已在 shell 中设置的同名变量优先。`.env` 已被 `.gitignore` 忽略，不会被提交。
+
 ```powershell
-$env:OPENAI_API_KEY = "..."
+copy .env.example .env   # 然后填入 OPENAI_API_KEY / OPENAI_BASE_URL / OPENAI_MODEL
 repoharness run C:\path\to\repo "定位解析错误，修复代码并运行相关测试"
 ```
 
