@@ -1,3 +1,0 @@
-[console_scripts]
-repoharness = repoharness.cli:main
-repoharness-mcp = repoharness.mcp_server:main
