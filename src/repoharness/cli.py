@@ -7,11 +7,12 @@ import json
 import os
 from pathlib import Path
 
-from .models import PlannerTurn, ToolCall
+from .models import Budget, PlannerTurn, ToolCall
 from .planners import OpenAICompatiblePlanner, ScriptedPlanner
 from .runtime import AgentRuntime
 from .store import SQLiteRunStore
 from .tools import build_repository_tools
+from .evaluation import run_suite
 
 
 def main() -> None:
@@ -26,7 +27,37 @@ def main() -> None:
     live.add_argument("--base-url", default=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"))
     live.add_argument("--model", default=os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
     live.add_argument("--api-key", default=os.getenv("OPENAI_API_KEY", ""))
+    evaluate = subparsers.add_parser("eval", help="Run an isolated task-level repository-agent evaluation suite")
+    evaluate.add_argument("suite", help="Path to an evaluation suite JSON file")
+    evaluate.add_argument("--output", default="eval-results")
+    evaluate.add_argument("--base-url", default=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"))
+    evaluate.add_argument("--model", default=os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
+    evaluate.add_argument("--api-key", default=os.getenv("OPENAI_API_KEY", ""))
+    evaluate.add_argument("--max-steps", type=int, default=30)
+    evaluate.add_argument("--max-tool-calls", type=int, default=60)
+    evaluate.add_argument("--timeout", type=float, default=600.0)
     args = parser.parse_args()
+
+    if args.command == "eval":
+        if not args.api_key:
+            parser.error("--api-key or OPENAI_API_KEY is required")
+        budget = Budget(
+            max_steps=args.max_steps,
+            max_tool_calls=args.max_tool_calls,
+            timeout_seconds=args.timeout,
+        )
+
+        def runtime_factory(eval_workspace: Path) -> AgentRuntime:
+            store = SQLiteRunStore(eval_workspace / ".repoharness" / "runs.db")
+            planner = OpenAICompatiblePlanner(
+                args.base_url, args.api_key, args.model,
+                max_context_chars=budget.max_context_chars,
+            )
+            return AgentRuntime(store, build_repository_tools(eval_workspace), planner, budget)
+
+        report = run_suite(args.suite, args.output, args.model, runtime_factory)
+        print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+        return
 
     workspace = str(Path(args.workspace).resolve())
     store = SQLiteRunStore(Path(workspace) / ".repoharness" / "runs.db")

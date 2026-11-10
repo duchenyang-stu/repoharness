@@ -1,0 +1,31 @@
+{
+  "name": "repoharness-smoke",
+  "tasks": [
+    {
+      "id": "fix-add",
+      "workspace": "fixtures/fix_add",
+      "objective": "修复 calc.py 中的加法实现，审阅变更并运行相关测试。",
+      "checks": [
+        {
+          "kind": "file_contains",
+          "path": "calc.py",
+          "value": "return a + b"
+        },
+        {
+          "kind": "file_not_contains",
+          "path": "calc.py",
+          "value": "return a - b"
+        },
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        }
+      ]
+    }
+  ]
+}

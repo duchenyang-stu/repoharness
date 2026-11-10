@@ -1,0 +1,11 @@
+{
+  "suite": "repoharness-smoke",
+  "planner": "scripted-evaluator",
+  "task_count": 1,
+  "passed": 1,
+  "pass_rate": 1.0,
+  "mean_steps": 7.0,
+  "mean_tool_calls": 6.0,
+  "verification_runs": 1,
+  "scope": "deterministic smoke test of the harness execution and grading path; not an LLM capability result"
+}
