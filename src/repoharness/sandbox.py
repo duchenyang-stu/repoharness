@@ -86,6 +86,6 @@ class WorkspaceSandbox:
             errors="replace",
             timeout=timeout_seconds,
             shell=False,
-            env={**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"},
+            env={**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8", "PYTHONDONTWRITEBYTECODE": "1"},
         )
 

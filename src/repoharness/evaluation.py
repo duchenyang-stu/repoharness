@@ -60,8 +60,21 @@ class SuiteResult:
         }
 
 
-def evaluate_task(workspace: str | Path, task: EvalTask) -> EvalResult:
-    """Grade final repository state independently from the model's final answer."""
+HIDDEN_TEST_MODULE = "hidden_check_test"
+
+
+def evaluate_task(
+    workspace: str | Path,
+    task: EvalTask,
+    *,
+    source: str | Path | None = None,
+    suite_dir: str | Path | None = None,
+) -> EvalResult:
+    """Grade final repository state independently from the model's final answer.
+
+    ``source`` is the pristine task workspace (for ``file_unchanged``); ``suite_dir`` is the
+    directory holding hidden tests (for ``hidden_test``). Both stay invisible to the agent.
+    """
     sandbox = WorkspaceSandbox(workspace)
     results: list[dict[str, Any]] = []
     for check in task.checks:
@@ -73,6 +86,26 @@ def evaluate_task(workspace: str | Path, task: EvalTask) -> EvalResult:
             found = check.value in content
             passed = found if check.kind == "file_contains" else not found
             results.append({"kind": check.kind, "path": check.path, "passed": passed})
+        elif check.kind == "file_unchanged":
+            if source is None or not check.path:
+                raise ValueError("file_unchanged requires path and a pristine source workspace")
+            original = (Path(source) / check.path).read_bytes()
+            current = sandbox.resolve(check.path, must_exist=True).read_bytes()
+            results.append({"kind": "file_unchanged", "path": check.path, "passed": original == current})
+        elif check.kind == "hidden_test":
+            if suite_dir is None or not check.path:
+                raise ValueError("hidden_test requires path and a suite directory")
+            hidden = (Path(suite_dir) / check.path).resolve(strict=True)
+            target = sandbox.root / f"{HIDDEN_TEST_MODULE}.py"
+            shutil.copyfile(hidden, target)
+            try:
+                completed = sandbox.run(["python", "-m", "unittest", HIDDEN_TEST_MODULE], 300)
+            finally:
+                target.unlink(missing_ok=True)
+            results.append({
+                "kind": "hidden_test", "path": check.path, "passed": completed.returncode == 0,
+                "returncode": completed.returncode, "stderr_tail": completed.stderr[-1500:],
+            })
         elif check.kind == "command":
             if not check.command:
                 raise ValueError("command check requires a command")
@@ -118,7 +151,7 @@ def run_suite(
         runtime = runtime_factory(workspace)
         state = runtime.create_run(task.objective, str(workspace))
         final = runtime.run(state.run_id)
-        grade = evaluate_task(workspace, task)
+        grade = evaluate_task(workspace, task, source=source, suite_dir=suite_file.parent)
         task_results.append({
             "task_id": task_id,
             "passed": grade.passed,

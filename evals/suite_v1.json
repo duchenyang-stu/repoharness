@@ -1,0 +1,355 @@
+{
+  "name": "repo-fix-v1",
+  "tasks": [
+    {
+      "id": "t1_clamp",
+      "tier": 1,
+      "workspace": "fixtures/t1_clamp",
+      "objective": "运行测试发现 mathutil.clamp 的结果不对。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_mathutil.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_clamp.py"
+        }
+      ]
+    },
+    {
+      "id": "t1_average",
+      "tier": 1,
+      "workspace": "fixtures/t1_average",
+      "objective": "stats.average 算出来的平均值偏小。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_stats.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_average.py"
+        }
+      ]
+    },
+    {
+      "id": "t1_range_sum",
+      "tier": 1,
+      "workspace": "fixtures/t1_range_sum",
+      "objective": "sumutil.range_sum 的结果比预期少。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_sumutil.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_range_sum.py"
+        }
+      ]
+    },
+    {
+      "id": "t2_palindrome",
+      "tier": 2,
+      "workspace": "fixtures/t2_palindrome",
+      "objective": "text.is_palindrome 对带标点和大小写的句子判断不对。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_text.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_palindrome.py"
+        }
+      ]
+    },
+    {
+      "id": "t2_word_count",
+      "tier": 2,
+      "workspace": "fixtures/t2_word_count",
+      "objective": "text.word_count 统计结果不对，标点和大小写没处理好。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_text.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_word_count.py"
+        }
+      ]
+    },
+    {
+      "id": "t2_flatten",
+      "tier": 2,
+      "workspace": "fixtures/t2_flatten",
+      "objective": "listutil.flatten 遇到多层嵌套时展开不彻底。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_listutil.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_flatten.py"
+        }
+      ]
+    },
+    {
+      "id": "t2_duration",
+      "tier": 2,
+      "workspace": "fixtures/t2_duration",
+      "objective": "timeparse.parse_duration 解析带分钟的时长时结果不对。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_timeparse.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_duration.py"
+        }
+      ]
+    },
+    {
+      "id": "t3_receipt",
+      "tier": 3,
+      "workspace": "fixtures/t3_receipt",
+      "objective": "收据 receipt 输出的金额格式和合计都不对。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_receipt.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_receipt.py"
+        }
+      ]
+    },
+    {
+      "id": "t3_config",
+      "tier": 3,
+      "workspace": "fixtures/t3_config",
+      "objective": "覆盖部分嵌套配置后，其它默认配置丢了，而且默认值还被改掉了。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_settings.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_config.py"
+        }
+      ]
+    },
+    {
+      "id": "t3_cache",
+      "tier": 3,
+      "workspace": "fixtures/t3_cache",
+      "objective": "UserStore 的缓存命中率不对，似乎总在淘汰刚用过的用户。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_store.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_cache.py"
+        }
+      ]
+    },
+    {
+      "id": "t3_inventory",
+      "tier": 3,
+      "workspace": "fixtures/t3_inventory",
+      "objective": "订单与库存逻辑需要满足 test_orders.py 中描述的行为（库存不足要报错、订单要么全成功要么库存完全不变）。请实现并运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_orders.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_inventory.py"
+        }
+      ]
+    },
+    {
+      "id": "t4_weeks",
+      "tier": 4,
+      "workspace": "fixtures/t4_weeks",
+      "objective": "日期工具函数的测试没有通过，请阅读项目说明后定位并修复，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_dates.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_weeks.py"
+        }
+      ]
+    },
+    {
+      "id": "t4_intervals",
+      "tier": 4,
+      "workspace": "fixtures/t4_intervals",
+      "objective": "intervals.merge_intervals 在某些输入上结果不对。请定位并修复问题，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_intervals.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_intervals.py"
+        }
+      ]
+    },
+    {
+      "id": "t4_linkedlist",
+      "tier": 4,
+      "workspace": "fixtures/t4_linkedlist",
+      "objective": "LinkedList 里有两个方法还没实现，请根据文档字符串和测试实现它们，运行测试确认通过。不要修改测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_linkedlist.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_linkedlist.py"
+        }
+      ]
+    }
+  ]
+}

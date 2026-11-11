@@ -73,6 +73,39 @@ class EvaluationTests(unittest.TestCase):
             self.assertEqual(result["tasks"][0]["tool_calls"], 4)
             self.assertTrue((root / "results" / "report.json").is_file())
 
+    def test_file_unchanged_detects_modified_tests(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source, workspace = root / "source", root / "workspace"
+            source.mkdir()
+            workspace.mkdir()
+            (source / "test_a.py").write_text("assert True\n", encoding="utf-8")
+            (workspace / "test_a.py").write_text("assert True\n", encoding="utf-8")
+            task = EvalTask("t", "o", (EvalCheck("file_unchanged", path="test_a.py"),))
+            self.assertTrue(evaluate_task(workspace, task, source=source).passed)
+            (workspace / "test_a.py").write_text("pass\n", encoding="utf-8")
+            self.assertFalse(evaluate_task(workspace, task, source=source).passed)
+
+    def test_hidden_test_runs_then_is_removed_from_workspace(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            suite_dir, workspace = root / "suite", root / "workspace"
+            (suite_dir / "hidden").mkdir(parents=True)
+            workspace.mkdir()
+            good = "def add(a, b):\n    return a + b\n"
+            bad = "def add(a, b):\n    return a - b\n"
+            (workspace / "calc.py").write_text(good, encoding="utf-8")
+            (suite_dir / "hidden" / "h.py").write_text(
+                "import unittest\nfrom calc import add\n"
+                "class H(unittest.TestCase):\n    def test_add(self): self.assertEqual(add(1, 1), 2)\n",
+                encoding="utf-8",
+            )
+            task = EvalTask("t", "o", (EvalCheck("hidden_test", path="hidden/h.py"),))
+            self.assertTrue(evaluate_task(workspace, task, suite_dir=suite_dir).passed)
+            self.assertFalse((workspace / "hidden_check_test.py").exists())
+            (workspace / "calc.py").write_text(bad, encoding="utf-8")
+            self.assertFalse(evaluate_task(workspace, task, suite_dir=suite_dir).passed)
+
 
 if __name__ == "__main__":
     unittest.main()
