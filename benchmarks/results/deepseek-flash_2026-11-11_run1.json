@@ -1,0 +1,629 @@
+{
+  "suite": "repo-fix-v1",
+  "model": "deepseek-flash",
+  "task_count": 14,
+  "passed": 14,
+  "pass_rate": 1.0,
+  "mean_steps": 5.928571428571429,
+  "mean_tool_calls": 7.5,
+  "total_prompt_tokens": 183354,
+  "total_completion_tokens": 15794,
+  "tasks": [
+    {
+      "task_id": "t1_clamp",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 7,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 15.375,
+      "planner_usage": {
+        "prompt_tokens": 11502,
+        "completion_tokens": 712,
+        "total_tokens": 12214,
+        "prompt_cache_hit_tokens": 9600,
+        "prompt_cache_miss_tokens": 1902
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_mathutil.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_clamp.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t1_average",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 5,
+      "tool_calls": 6,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 12.906000000191852,
+      "planner_usage": {
+        "prompt_tokens": 8147,
+        "completion_tokens": 496,
+        "total_tokens": 8643,
+        "prompt_cache_hit_tokens": 6656,
+        "prompt_cache_miss_tokens": 1491
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_stats.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_average.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t1_range_sum",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 5,
+      "tool_calls": 6,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 12.437000000150874,
+      "planner_usage": {
+        "prompt_tokens": 8077,
+        "completion_tokens": 563,
+        "total_tokens": 8640,
+        "prompt_cache_hit_tokens": 6400,
+        "prompt_cache_miss_tokens": 1677
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_sumutil.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t1_range_sum.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t2_palindrome",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 6,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 15.014999999897555,
+      "planner_usage": {
+        "prompt_tokens": 10488,
+        "completion_tokens": 646,
+        "total_tokens": 11134,
+        "prompt_cache_hit_tokens": 8704,
+        "prompt_cache_miss_tokens": 1784
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_text.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_palindrome.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t2_word_count",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 8,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 18.358999999938533,
+      "planner_usage": {
+        "prompt_tokens": 13175,
+        "completion_tokens": 1486,
+        "total_tokens": 14661,
+        "prompt_cache_hit_tokens": 11264,
+        "prompt_cache_miss_tokens": 1911
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_text.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_word_count.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t2_flatten",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 7,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 19.875,
+      "planner_usage": {
+        "prompt_tokens": 12875,
+        "completion_tokens": 1574,
+        "total_tokens": 14449,
+        "prompt_cache_hit_tokens": 10752,
+        "prompt_cache_miss_tokens": 2123
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_listutil.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_flatten.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t2_duration",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 5,
+      "tool_calls": 7,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 13.093000000109896,
+      "planner_usage": {
+        "prompt_tokens": 9558,
+        "completion_tokens": 589,
+        "total_tokens": 10147,
+        "prompt_cache_hit_tokens": 7552,
+        "prompt_cache_miss_tokens": 2006
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_timeparse.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t2_duration.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t3_receipt",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 9,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 19.391000000061467,
+      "planner_usage": {
+        "prompt_tokens": 13902,
+        "completion_tokens": 1426,
+        "total_tokens": 15328,
+        "prompt_cache_hit_tokens": 11776,
+        "prompt_cache_miss_tokens": 2126
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_receipt.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_receipt.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t3_config",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 8,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 16.218000000109896,
+      "planner_usage": {
+        "prompt_tokens": 12996,
+        "completion_tokens": 1072,
+        "total_tokens": 14068,
+        "prompt_cache_hit_tokens": 10752,
+        "prompt_cache_miss_tokens": 2244
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_settings.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_config.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t3_cache",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 6,
+      "tool_calls": 8,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 16.0,
+      "planner_usage": {
+        "prompt_tokens": 14704,
+        "completion_tokens": 911,
+        "total_tokens": 15615,
+        "prompt_cache_hit_tokens": 11904,
+        "prompt_cache_miss_tokens": 2800
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_store.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_cache.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t3_inventory",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 5,
+      "tool_calls": 8,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 20.563000000081956,
+      "planner_usage": {
+        "prompt_tokens": 14473,
+        "completion_tokens": 2307,
+        "total_tokens": 16780,
+        "prompt_cache_hit_tokens": 11776,
+        "prompt_cache_miss_tokens": 2697
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_orders.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t3_inventory.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t4_weeks",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 7,
+      "tool_calls": 10,
+      "verification_runs": 2,
+      "rejected_completions": 0,
+      "elapsed_seconds": 17.594000000040978,
+      "planner_usage": {
+        "prompt_tokens": 18407,
+        "completion_tokens": 866,
+        "total_tokens": 19273,
+        "prompt_cache_hit_tokens": 15232,
+        "prompt_cache_miss_tokens": 3175
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_dates.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_weeks.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t4_intervals",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 7,
+      "tool_calls": 8,
+      "verification_runs": 2,
+      "rejected_completions": 0,
+      "elapsed_seconds": 23.219000000040978,
+      "planner_usage": {
+        "prompt_tokens": 16510,
+        "completion_tokens": 1678,
+        "total_tokens": 18188,
+        "prompt_cache_hit_tokens": 14080,
+        "prompt_cache_miss_tokens": 2430
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_intervals.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_intervals.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+        }
+      ]
+    },
+    {
+      "task_id": "t4_linkedlist",
+      "passed": true,
+      "run_status": "succeeded",
+      "steps": 7,
+      "tool_calls": 7,
+      "verification_runs": 1,
+      "rejected_completions": 0,
+      "elapsed_seconds": 20.57799999997951,
+      "planner_usage": {
+        "prompt_tokens": 18540,
+        "completion_tokens": 1468,
+        "total_tokens": 20008,
+        "prompt_cache_hit_tokens": 15872,
+        "prompt_cache_miss_tokens": 2668
+      },
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ],
+          "passed": true,
+          "returncode": 0,
+          "stdout_tail": "",
+          "stderr_tail": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_linkedlist.py",
+          "passed": true
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/t4_linkedlist.py",
+          "passed": true,
+          "returncode": 0,
+          "stderr_tail": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n"
+        }
+      ]
+    }
+  ]
+}
