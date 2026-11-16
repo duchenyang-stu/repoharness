@@ -32,10 +32,12 @@ def main(suite_path: Path = ROOT / "evals" / "suite_v1.json") -> int:
             kinds = {c["kind"]: c["passed"] for c in before.checks if c["kind"] in {"command", "hidden_test"}}
             if before.passed:
                 problems.append(f"{task_id}: passes without any fix")
-            if kinds.get("command") is True:
+            if kinds.get("command") is True and not case.get("visible_tests_may_pass"):
                 problems.append(f"{task_id}: visible tests already pass as shipped")
             if kinds.get("hidden_test") is True:
                 problems.append(f"{task_id}: hidden tests already pass as shipped")
+            if case.get("visible_tests_may_pass") and kinds.get("hidden_test") is not False:
+                problems.append(f"{task_id}: visible tests may pass, so hidden tests must fail as shipped")
 
             solved = Path(directory) / "solved"
             shutil.copytree(source, solved)
@@ -59,4 +61,4 @@ def main(suite_path: Path = ROOT / "evals" / "suite_v1.json") -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / "evals" / "suite_v1.json"))

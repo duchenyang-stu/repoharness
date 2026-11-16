@@ -86,6 +86,18 @@ class EvaluationTests(unittest.TestCase):
             (workspace / "test_a.py").write_text("pass\n", encoding="utf-8")
             self.assertFalse(evaluate_task(workspace, task, source=source).passed)
 
+    def test_file_existence_checks_cover_created_and_leftover_artifacts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "keep.txt").write_text("ok", encoding="utf-8")
+            task = EvalTask("artifacts", "no leftovers", (
+                EvalCheck("file_exists", path="keep.txt"),
+                EvalCheck("file_not_exists", path="debug.log"),
+            ))
+            self.assertTrue(evaluate_task(root, task).passed)
+            (root / "debug.log").write_text("secret", encoding="utf-8")
+            self.assertFalse(evaluate_task(root, task).passed)
+
     def test_hidden_test_runs_then_is_removed_from_workspace(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

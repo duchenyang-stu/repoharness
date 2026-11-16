@@ -42,6 +42,7 @@ class SuiteResult:
     suite: str
     model: str
     tasks: list[dict[str, Any]]
+    ablation: str = "full"
 
     def to_dict(self) -> dict[str, Any]:
         passed = sum(1 for item in self.tasks if item["passed"])
@@ -49,6 +50,7 @@ class SuiteResult:
         return {
             "suite": self.suite,
             "model": self.model,
+            "ablation": self.ablation,
             "task_count": count,
             "passed": passed,
             "pass_rate": passed / count if count else 0.0,
@@ -85,6 +87,13 @@ def evaluate_task(
             content = path.read_text(encoding="utf-8", errors="replace")
             found = check.value in content
             passed = found if check.kind == "file_contains" else not found
+            results.append({"kind": check.kind, "path": check.path, "passed": passed})
+        elif check.kind in {"file_exists", "file_not_exists"}:
+            if not check.path:
+                raise ValueError(f"{check.kind} requires path")
+            path = sandbox.resolve(check.path, must_exist=False)
+            exists = path.exists()
+            passed = exists if check.kind == "file_exists" else not exists
             results.append({"kind": check.kind, "path": check.path, "passed": passed})
         elif check.kind == "file_unchanged":
             if source is None or not check.path:
@@ -131,6 +140,7 @@ def run_suite(
     output_root: str | Path,
     model: str,
     runtime_factory,
+    ablation: str = "full",
 ) -> SuiteResult:
     """Run each task in an isolated workspace copy and grade final state with hidden checks."""
     suite_file = Path(suite_path).expanduser().resolve(strict=True)
@@ -160,11 +170,13 @@ def run_suite(
             "tool_calls": final.tool_calls,
             "verification_runs": final.verification_runs,
             "rejected_completions": final.rejected_completions,
+            "bypassed_rejections": final.bypassed_rejections,
+            "error": final.error,
             "elapsed_seconds": final.elapsed_seconds,
             "planner_usage": final.planner_usage,
             "checks": grade.checks,
         })
         runtime.store.close()
-    result = SuiteResult(suite_name, model, task_results)
+    result = SuiteResult(suite_name, model, task_results, ablation)
     (output / "report.json").write_text(json.dumps(result.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
     return result

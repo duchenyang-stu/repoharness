@@ -1,0 +1,213 @@
+{
+  "name": "repo-fix-v2",
+  "tasks": [
+    {
+      "id": "v2_shop_tax",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_shop_tax",
+      "objective": "财务反馈：部分订单的结算总额和对账系统差几分钱。请按 docs/SPEC.md 修复结算逻辑。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_cart.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_shop_tax.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_retry",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_retry",
+      "objective": "线上调用第三方接口时，重试的等待时间和次数与文档描述的不一致。请对照 netutil/README.md 修复。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_retry.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_retry.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_csv_orders",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_csv_orders",
+      "objective": "运营同学导入订单 CSV 时经常失败，而且金额有时差一分钱。请对照 docs/FORMAT.md 让导入器符合规范。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_importer.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_csv_orders.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_ttl_cache",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_ttl_cache",
+      "objective": "请为缓存增加 TTL（过期）支持，需求见 cachelib/README.md。已有行为不能被破坏。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_lru.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_ttl_cache.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_safe_join",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_safe_join",
+      "objective": "安全团队报告：通过用户可控的文件名可以读取到存储目录之外的文件。请修复，并保证正常的子目录访问不受影响。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_storage.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_safe_join.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_config_layers",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_config_layers",
+      "objective": "配置系统的取值优先级和类型解析与 README 描述不符（环境变量设置了却不生效、布尔值 'false' 被当成真等）。请修复。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_confkit.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_config_layers.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_semver",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_semver",
+      "objective": "版本号排序不符合 SemVer 2.0 规范（预发布版本的先后、构建元数据的处理都有问题）。请修复。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_version.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_semver.py"
+        }
+      ]
+    },
+    {
+      "id": "v2_scheduler",
+      "tier": 5,
+      "visible_tests_may_pass": true,
+      "workspace": "fixtures/v2_scheduler",
+      "objective": "任务调度器的执行顺序和 docs/ORDERING.md 描述不一致，导致同一时刻到期的任务执行顺序不对。请修复。不要修改现有测试文件。",
+      "checks": [
+        {
+          "kind": "command",
+          "command": [
+            "python",
+            "-m",
+            "unittest",
+            "discover"
+          ]
+        },
+        {
+          "kind": "file_unchanged",
+          "path": "test_scheduler.py"
+        },
+        {
+          "kind": "hidden_test",
+          "path": "hidden/v2_scheduler.py"
+        }
+      ]
+    }
+  ]
+}
