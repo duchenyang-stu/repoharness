@@ -8,7 +8,7 @@ import time
 import uuid
 from abc import ABC, abstractmethod
 
-from .models import Budget, PlannerTurn, RunState, RunStatus
+from .models import Ablation, Budget, PlannerTurn, RunState, RunStatus
 from .context import compact_tool_result
 from .store import SQLiteRunStore
 from .tools import ToolRegistry
@@ -21,11 +21,15 @@ class Planner(ABC):
 
 
 class AgentRuntime:
-    def __init__(self, store: SQLiteRunStore, tools: ToolRegistry, planner: Planner, budget: Budget | None = None) -> None:
+    def __init__(
+        self, store: SQLiteRunStore, tools: ToolRegistry, planner: Planner,
+        budget: Budget | None = None, ablation: Ablation | None = None,
+    ) -> None:
         self.store = store
         self.tools = tools
         self.planner = planner
         self.budget = budget or Budget()
+        self.ablation = ablation or Ablation()
         self._cancelled: set[str] = set()
         self._cancel_lock = threading.Lock()
 
@@ -71,6 +75,11 @@ class AgentRuntime:
                         state.planner_usage[key] = state.planner_usage.get(key, 0) + value
                 if turn.final_answer is not None:
                     rejection = self._completion_rejection(state)
+                    if rejection and not self.ablation.completion_gate:
+                        # Ablated: record what the gate would have done so its value can be measured.
+                        state.bypassed_rejections += 1
+                        self.store.append_event(run_id, "completion.gate_bypassed", {"reason": rejection})
+                        rejection = None
                     if rejection:
                         state.rejected_completions += 1
                         state.messages.append({"role": "user", "content": rejection})
@@ -108,7 +117,7 @@ class AgentRuntime:
                             "call_id": call.call_id, "name": call.name, "arguments": call.arguments,
                         })
                         tool = self.tools.get(call.name)
-                        if tool.kind == "mutate" and not state.repository_inspected:
+                        if tool.kind == "mutate" and not state.repository_inspected and self.ablation.read_before_write:
                             result = {
                                 "ok": False,
                                 "error": {
@@ -128,7 +137,7 @@ class AgentRuntime:
                     else:
                         result = cached
                         replayed = True
-                    model_result = compact_tool_result(result)
+                    model_result = compact_tool_result(result) if self.ablation.compact_tool_results else result
                     state.messages.append({
                         "role": "tool", "tool_call_id": call.call_id, "name": call.name,
                         "content": model_result,

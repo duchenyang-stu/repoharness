@@ -8,7 +8,7 @@ import os
 import sys
 from pathlib import Path
 
-from .models import Budget, PlannerTurn, ToolCall
+from .models import ABLATABLE_COMPONENTS, Ablation, Budget, PlannerTurn, ToolCall
 from .planners import OpenAICompatiblePlanner, ScriptedPlanner
 from .runtime import AgentRuntime
 from .store import SQLiteRunStore
@@ -48,6 +48,11 @@ def main() -> None:
     evaluate.add_argument("--max-steps", type=int, default=30)
     evaluate.add_argument("--max-tool-calls", type=int, default=60)
     evaluate.add_argument("--timeout", type=float, default=600.0)
+    evaluate.add_argument(
+        "--disable", action="append", default=[], choices=ABLATABLE_COMPONENTS,
+        help="Ablation: switch off one harness component (repeatable). Default is the full harness.",
+    )
+    evaluate.add_argument("--temperature", type=float, default=None, help="Sampling temperature (default: provider default)")
     args = parser.parse_args()
 
     if args.command == "eval":
@@ -59,15 +64,19 @@ def main() -> None:
             timeout_seconds=args.timeout,
         )
 
+        ablation = Ablation.disabling(*args.disable)
+
         def runtime_factory(eval_workspace: Path) -> AgentRuntime:
             store = SQLiteRunStore(eval_workspace / ".repoharness" / "runs.db")
             planner = OpenAICompatiblePlanner(
                 args.base_url, args.api_key, args.model,
                 max_context_chars=budget.max_context_chars,
+                compact_context=ablation.compact_context,
+                temperature=args.temperature,
             )
-            return AgentRuntime(store, build_repository_tools(eval_workspace), planner, budget)
+            return AgentRuntime(store, build_repository_tools(eval_workspace), planner, budget, ablation)
 
-        report = run_suite(args.suite, args.output, args.model, runtime_factory)
+        report = run_suite(args.suite, args.output, args.model, runtime_factory, ablation.label)
         print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
         return
 

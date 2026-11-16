@@ -28,6 +28,31 @@ class Budget:
             raise ValueError("Budget values must be positive")
 
 
+ABLATABLE_COMPONENTS = ("completion_gate", "read_before_write", "compact_context", "compact_tool_results")
+
+
+@dataclass(frozen=True)
+class Ablation:
+    """Per-component switches. Defaults are the full harness; disable one at a time for ablations."""
+
+    completion_gate: bool = True
+    read_before_write: bool = True
+    compact_context: bool = True
+    compact_tool_results: bool = True
+
+    @classmethod
+    def disabling(cls, *components: str) -> "Ablation":
+        unknown = set(components) - set(ABLATABLE_COMPONENTS)
+        if unknown:
+            raise ValueError(f"Unknown ablation component(s): {sorted(unknown)}; choose from {ABLATABLE_COMPONENTS}")
+        return cls(**{name: False for name in components})
+
+    @property
+    def label(self) -> str:
+        off = [name for name in ABLATABLE_COMPONENTS if not getattr(self, name)]
+        return "full" if not off else "no_" + "+".join(off)
+
+
 @dataclass(frozen=True)
 class ToolCall:
     call_id: str
@@ -65,6 +90,7 @@ class RunState:
     last_verification_tool_call: int = -1
     last_verification_passed: bool | None = None
     rejected_completions: int = 0
+    bypassed_rejections: int = 0
     planner_usage: dict[str, int] = field(default_factory=dict)
     repository_inspected: bool = False
 
